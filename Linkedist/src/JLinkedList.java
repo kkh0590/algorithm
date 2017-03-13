@@ -63,85 +63,121 @@ public class JLinkedList {
 			newNode.next = x.next;
 			x.next = newNode;
 			size++;
-			
-			if(newNode.next == null) {
+
+			if (newNode.next == null) {
 				tail = newNode;
 			}
 		}
 	}
-	
+
 	public String toString() {
-		if(head == null) {
+		if (head == null) {
 			return "[ ]";
 		} else {
 			Node tmp = head;
 			String str = "[";
-			
-			while(tmp.next != null) {
+
+			while (tmp.next != null) {
 				str += tmp.data + ", ";
 				tmp = tmp.next;
 			}
 			str += tmp.data;
-			
-			return str+"]";
+
+			return str + "]";
 		}
 	}
-	
+
 	public Object removeFirst() {
 		Node tmp = head;
 		head = tmp.next;
-		
-		Object returnVal = (Object)tmp.data;
+
+		Object returnVal = (Object) tmp.data;
 		tmp = null;
 		size--;
-		
+
 		return returnVal;
 	}
-	
+
 	public int size() {
 		return size;
 	}
-	
+
+	public void remove(int idx) {
+		Node tmp = head;
+
+		while (--idx > 0) {
+			tmp = tmp.next;
+		}
+
+		tmp.next = tmp.next.next;
+		tmp = tmp.next;
+		tmp = null;
+	}
+
 	public int indexOf(Object value) {
 		Node tmp = head;
 		int idx = 0;
-		
-		while(tmp.data != value) {
+
+		while (tmp.data != value) {
 			tmp = tmp.next;
 			idx++;
-			
-			if(tmp == null) {
+
+			if (tmp == null) {
 				return -1;
 			}
 		}
-		
+
 		return idx;
 	}
-	
+
 	public ListIterator listIterator() {
 		return new ListIterator();
 	}
-	
+
 	public class ListIterator {
 		private Node next;
 		private Node lastReturned;
 		private int nextIndex;
-		
+
 		ListIterator() {
 			next = head;
 			nextIndex = 0;
 		}
-		
+
 		public Object next() {
 			lastReturned = next;
 			next = next.next;
 			nextIndex++;
-			
+
 			return lastReturned.data;
 		}
-		
+
 		public boolean hasNext() {
 			return nextIndex < size();
+		}
+
+		public void add(Object input) {
+			Node newNode = new Node(input);
+
+			if (lastReturned == null) {
+				head = newNode;
+				newNode.next = next;
+			} else {
+				lastReturned.next = newNode;
+				newNode.next = next;
+			}
+
+			lastReturned = newNode;
+			nextIndex++;
+			size++;
+		}
+		
+		public void remove() {
+			if(nextIndex == 0) {
+				throw new IllegalStateException();
+			}
+			JLinkedList.this.remove(nextIndex-1);
+			nextIndex--;
 		}
 	}
 }
