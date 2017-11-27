@@ -1,1 +1,3 @@
 # algorithm
+
+# To solve various algorithm, basically Baekjoon, algospot, etc...
